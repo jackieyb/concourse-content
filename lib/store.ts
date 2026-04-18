@@ -10,12 +10,13 @@ type AppState = {
   activeDraftId: string | null;
   publications: Publication[];
   lastRecommendations: Recommendation[] | null;
+  recommendationsDate: string | null;
 
   upsertDraft: (draft: Draft) => void;
   setActiveDraft: (id: string | null) => void;
   deleteDraft: (id: string) => void;
   publishDraft: (draftId: string) => Publication | null;
-  setRecommendations: (recs: Recommendation[]) => void;
+  setRecommendations: (recs: Recommendation[], date: string) => void;
   resetAll: () => void;
 };
 
@@ -26,6 +27,7 @@ export const useAppStore = create<AppState>()(
       activeDraftId: null,
       publications: SEED_PUBLICATIONS,
       lastRecommendations: null,
+      recommendationsDate: null,
 
       upsertDraft: (draft) =>
         set((s) => ({
@@ -65,7 +67,8 @@ export const useAppStore = create<AppState>()(
         return pub;
       },
 
-      setRecommendations: (recs) => set({ lastRecommendations: recs }),
+      setRecommendations: (recs, date) =>
+        set({ lastRecommendations: recs, recommendationsDate: date }),
 
       resetAll: () =>
         set({
@@ -73,6 +76,7 @@ export const useAppStore = create<AppState>()(
           activeDraftId: null,
           publications: SEED_PUBLICATIONS,
           lastRecommendations: null,
+          recommendationsDate: null,
         }),
     }),
     {

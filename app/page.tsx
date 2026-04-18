@@ -7,7 +7,7 @@ import { RefreshCw, Zap } from "lucide-react";
 import { RecCard } from "@/components/rec-card";
 import { SignalBoard } from "@/components/signal-board";
 import { useAppStore } from "@/lib/store";
-import { formatDayDate, timeOfDayGreeting } from "@/lib/utils";
+import { formatDayDate, timeOfDayGreeting, todayKey } from "@/lib/utils";
 
 type RecResponse = { weekOf: string; recommendations: Recommendation[] };
 type SignalsResponse = { weekOf: string; capturedAt: string; signals: Signal[] };
@@ -15,6 +15,8 @@ type SignalsResponse = { weekOf: string; capturedAt: string; signals: Signal[] }
 export default function DashboardPage() {
   const publications = useAppStore((s) => s.publications);
   const setRecommendations = useAppStore((s) => s.setRecommendations);
+  const cachedRecs = useAppStore((s) => s.lastRecommendations);
+  const cachedDate = useAppStore((s) => s.recommendationsDate);
 
   const [recs, setRecs] = useState<Recommendation[] | null>(null);
   const [signalsData, setSignalsData] = useState<SignalsResponse | null>(null);
@@ -39,15 +41,21 @@ export default function DashboardPage() {
       .then((r) => r.json())
       .then((data: RecResponse) => {
         setRecs(data.recommendations);
-        setRecommendations(data.recommendations);
+        setRecommendations(data.recommendations, todayKey());
       })
       .catch((err) => setRecError(err.message ?? "Failed to load recommendations"))
       .finally(() => setLoadingRecs(false));
   }, [publications, setRecommendations]);
 
   useEffect(() => {
+    const today = todayKey();
+    if (cachedRecs && cachedRecs.length && cachedDate === today) {
+      setRecs(cachedRecs);
+      setLoadingRecs(false);
+      return;
+    }
     loadRecs();
-  }, [loadRecs]);
+  }, [loadRecs, cachedRecs, cachedDate]);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">

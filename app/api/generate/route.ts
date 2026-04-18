@@ -88,7 +88,7 @@ const CONTENT_TOOL: Anthropic.Tool = {
       body: {
         type: "string",
         description:
-          "The article body as markdown. Must include: opening TL;DR block (can be a duplicate of the tldr field), H2s (several phrased as questions), short paragraphs (2-4 sentences each), at least one list or table, concrete finance-workflow examples, at least one real Concourse customer reference or metric where natural, and a closing next-step. No filler transitions. Do not include the H1 title here — that's the title field. Do not include the FAQ here — that's the faq field. Target the word count for the chosen format.",
+          "The article body as markdown. Must include: H2s (several phrased as questions), short paragraphs (2-4 sentences each), at least one list or table, concrete finance-workflow examples, at least one real Concourse customer reference or metric where natural, and a closing next-step. No filler transitions. Do NOT include a TL;DR block — the tldr field is rendered separately. Do not include the H1 title here — that's the title field. Do not include the FAQ here — that's the faq field. Target the word count for the chosen format.",
       },
       faq: {
         type: "array",
@@ -121,6 +121,19 @@ const CONTENT_TOOL: Anthropic.Tool = {
     },
   },
 };
+
+function stripLeadingTldr(body: string): string {
+  const lines = body.replace(/\r\n/g, "\n").split("\n");
+  let i = 0;
+  while (i < lines.length && !lines[i].trim()) i += 1;
+  if (i >= lines.length) return body;
+  const first = lines[i].trim();
+  const isTldr = /^(\*\*)?\s*(tl;dr|tldr)\s*[:：]?(\*\*)?/i.test(first);
+  if (!isTldr) return body;
+  let j = i + 1;
+  while (j < lines.length && lines[j].trim()) j += 1;
+  return lines.slice(j).join("\n").trimStart();
+}
 
 function buildPrompt(req: GenerateRequest) {
   const fmt = FORMATS[req.format];
@@ -214,7 +227,8 @@ export async function POST(req: Request) {
       faq: FAQItem[];
     };
 
-    const portableBody = markdownToPortableText(input.body);
+    const strippedBody = stripLeadingTldr(input.body);
+    const portableBody = markdownToPortableText(strippedBody);
 
     const content: GeneratedContent = {
       title: input.title,

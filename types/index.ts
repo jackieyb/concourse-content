@@ -68,6 +68,14 @@ export type PortableTextBlock = {
   }>;
 };
 
+export type PortableTableBlock = {
+  _type: "table";
+  _key: string;
+  rows: { _key: string; cells: string[] }[];
+};
+
+export type PortableContent = PortableTextBlock | PortableTableBlock;
+
 export type FAQItem = {
   question: string;
   answer: string;
@@ -82,7 +90,7 @@ export type GeneratedContent = {
   tldr: string;
   primaryKeyword: string;
   secondaryKeywords: string[];
-  body: PortableTextBlock[];
+  body: PortableContent[];
   faq: FAQItem[];
   internalLinkSuggestions: string[];
   callToAction: string;

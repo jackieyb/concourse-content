@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Sparkles, FileJson, Eye, Pencil, Send } from "lucide-react";
+import { Loader2, Sparkles, FileJson, Eye, Pencil, Send, Trash2, X } from "lucide-react";
 import type {
   Draft,
   FormatKey,
   GeneratedContent,
-  PortableTextBlock,
+  PortableContent,
   Recommendation,
   Signal,
   Urgency,
@@ -219,7 +219,7 @@ export default function GenerateClient() {
 
   const currentContent: GeneratedContent | null = useMemo(() => {
     if (!title || !bodyMd) return null;
-    const body: PortableTextBlock[] = markdownToPortableText(bodyMd);
+    const body: PortableContent[] = markdownToPortableText(bodyMd);
     return {
       title,
       slug: slugify(title),
@@ -404,7 +404,7 @@ export default function GenerateClient() {
           {loading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Generating with Claude Opus 4.7…
+              Generating…
             </>
           ) : (
             <>
@@ -655,34 +655,96 @@ export default function GenerateClient() {
                     The single highest-leverage AEO move. Ships as schema.org FAQPage.
                   </p>
                 </div>
-                <span className="text-xs text-neutral-400">{faq.length} items</span>
-              </div>
-              <div className="mt-4 space-y-4">
-                {faq.map((item, i) => (
-                  <div key={i} className="rounded-md border border-neutral-200 p-3">
-                    <input
-                      className="w-full rounded-sm border border-transparent bg-neutral-50 px-2 py-1 text-sm font-semibold outline-none focus:border-neutral-300 focus:bg-white"
-                      value={item.question}
-                      onChange={(e) => {
-                        const next = [...faq];
-                        next[i] = { ...item, question: e.target.value };
-                        setFaq(next);
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-neutral-400">{faq.length} items</span>
+                  {faq.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (
+                          !window.confirm(
+                            "Remove the entire FAQ section from this draft?",
+                          )
+                        )
+                          return;
+                        setFaq([]);
+                        if (draftId) {
+                          const d = drafts[draftId];
+                          if (d?.content) {
+                            upsertDraft({
+                              ...d,
+                              content: { ...d.content, faq: [] },
+                              status: "ready",
+                              updatedAt: new Date().toISOString(),
+                            });
+                          }
+                        }
                       }}
-                    />
-                    <textarea
-                      rows={3}
-                      className="mt-2 w-full rounded-sm border border-neutral-200 px-2 py-1 text-sm outline-none focus:border-neutral-900"
-                      value={item.answer}
-                      onChange={(e) => {
-                        const next = [...faq];
-                        next[i] = { ...item, answer: e.target.value };
-                        setFaq(next);
-                      }}
-                      onBlur={saveEdits}
-                    />
-                  </div>
-                ))}
+                      className="inline-flex items-center gap-1 rounded-md border border-neutral-200 px-2 py-1 text-xs font-medium text-neutral-600 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
+                    >
+                      <Trash2 className="h-3 w-3" /> Clear all
+                    </button>
+                  )}
+                </div>
               </div>
+              {faq.length === 0 ? (
+                <p className="mt-4 rounded-md border border-dashed border-neutral-200 bg-neutral-50 p-4 text-center text-xs text-neutral-500">
+                  No FAQ items. Regenerate the draft to restore them.
+                </p>
+              ) : (
+                <div className="mt-4 space-y-4">
+                  {faq.map((item, i) => (
+                    <div
+                      key={i}
+                      className="group relative rounded-md border border-neutral-200 p-3 pr-10"
+                    >
+                      <button
+                        type="button"
+                        aria-label={`Delete FAQ item ${i + 1}`}
+                        onClick={() => {
+                          const next = faq.filter((_, idx) => idx !== i);
+                          setFaq(next);
+                          if (draftId) {
+                            const d = drafts[draftId];
+                            if (d?.content) {
+                              upsertDraft({
+                                ...d,
+                                content: { ...d.content, faq: next },
+                                status: "ready",
+                                updatedAt: new Date().toISOString(),
+                              });
+                            }
+                          }
+                        }}
+                        className="absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-md text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                      <input
+                        className="w-full rounded-sm border border-transparent bg-neutral-50 px-2 py-1 text-sm font-semibold outline-none focus:border-neutral-300 focus:bg-white"
+                        value={item.question}
+                        onChange={(e) => {
+                          const next = [...faq];
+                          next[i] = { ...item, question: e.target.value };
+                          setFaq(next);
+                        }}
+                        onBlur={saveEdits}
+                      />
+                      <textarea
+                        rows={3}
+                        className="mt-2 w-full rounded-sm border border-neutral-200 px-2 py-1 text-sm outline-none focus:border-neutral-900"
+                        value={item.answer}
+                        onChange={(e) => {
+                          const next = [...faq];
+                          next[i] = { ...item, answer: e.target.value };
+                          setFaq(next);
+                        }}
+                        onBlur={saveEdits}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Internal links + CTA */}
@@ -747,7 +809,7 @@ function GeneratingState({ format }: { format: FormatKey }) {
         Writing your {f.label.toLowerCase()}…
       </h3>
       <p className="mt-1 max-w-md text-sm text-neutral-500">
-        Claude Opus 4.7 is drafting a {f.wordCountTarget[0]}–{f.wordCountTarget[1]} word piece
+        Drafting a {f.wordCountTarget[0]}–{f.wordCountTarget[1]} word piece
         with TL;DR, FAQ, meta, and Portable Text body. Typically 30–60 seconds.
       </p>
       <div className="mt-6 flex flex-wrap gap-2 text-xs text-neutral-500">
