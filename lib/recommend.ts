@@ -208,10 +208,15 @@ export function recommend({
   const picked: Recommendation[] = [];
   const usedFormats = new Set<FormatKey>();
 
+  const framingOrder: Framing[] = shuffleFramings(
+    scored[0]?.signal.id ?? "seed",
+  );
+
   for (const r of scored) {
     const format = resolveFormat(r.format, r.signal.category, usedFormats, recentFormats);
     const { subject, angle } = buildSubject(r.signal, format);
     const urgency = urgencyFor(r.signal, format);
+    const framing = framingOrder[picked.length % framingOrder.length];
 
     picked.push({
       id: `rec-${r.signal.id}`,
@@ -220,7 +225,7 @@ export function recommend({
       angle,
       format,
       urgency,
-      rationale: buildRationale(r.signal, format, r.reasons),
+      rationale: buildRationale(r.signal, format, framing),
       primaryKeyword: r.signal.keywords[0] ?? "ai for finance",
       secondaryKeywords: r.signal.keywords.slice(1, 4),
     });
@@ -255,14 +260,36 @@ function resolveFormat(
   return preferred;
 }
 
+type Framing = "tension" | "timing" | "vacuum" | "search";
+
+const ALL_FRAMINGS: Framing[] = ["tension", "timing", "vacuum", "search"];
+
+function shuffleFramings(seed: string): Framing[] {
+  const code = seed.charCodeAt(0) + seed.charCodeAt(seed.length - 1);
+  const start = code % ALL_FRAMINGS.length;
+  return [
+    ALL_FRAMINGS[start],
+    ALL_FRAMINGS[(start + 1) % ALL_FRAMINGS.length],
+    ALL_FRAMINGS[(start + 2) % ALL_FRAMINGS.length],
+    ALL_FRAMINGS[(start + 3) % ALL_FRAMINGS.length],
+  ];
+}
+
 function buildRationale(
   signal: Signal,
   format: FormatKey,
-  _reasons: string[],
+  framing: Framing,
 ): string {
-  const gist = firstSentence(signal.summary);
-  const strategic = strategicLine(signal, format);
-  return `${gist} ${strategic}`;
+  switch (framing) {
+    case "tension":
+      return tensionRationale(signal, format);
+    case "timing":
+      return timingRationale(signal, format);
+    case "vacuum":
+      return vacuumRationale(signal, format);
+    case "search":
+      return searchRationale(signal, format);
+  }
 }
 
 function firstSentence(s: string): string {
@@ -271,42 +298,85 @@ function firstSentence(s: string): string {
   return (match ? match[0] : trimmed).trim();
 }
 
-function strategicLine(signal: Signal, format: FormatKey): string {
+function tensionRationale(signal: Signal, format: FormatKey): string {
+  const gist = firstSentence(signal.summary);
+  const kw = signal.keywords[0] ?? "this shift";
+  const close: Record<FormatKey, string> = {
+    "trend-piece": `A ${FORMATS[format].label.toLowerCase()} names the contradiction before peers smooth it over.`,
+    "thought-leadership": `Concourse is positioned to name that contradiction — point solutions can't, because owning the whole workflow is the only answer.`,
+    "how-to": `Teams resolving that contradiction need a concrete playbook this week, not a hot take.`,
+    comparison: `A head-to-head reframes ${kw} as a buying decision, not a trend to watch.`,
+    "case-study": `A named customer story collapses that contradiction into an outcome a buyer can cite internally.`,
+    listicle: `A scannable list surfaces the ${kw} tradeoffs finance teams are already arguing about in Slack.`,
+    "pillar-post": `An authoritative guide resolves the contradiction for the readers who land here for the next 12 months.`,
+    faq: `AEO-structured answers catch buyers typing the exact tension into ChatGPT.`,
+  };
+  return `${gist} That creates a contradiction finance teams can't ignore — the operating pressure isn't slowing down while the compliance bar keeps rising. ${close[format]}`;
+}
+
+function timingRationale(signal: Signal, format: FormatKey): string {
   const hours = hoursSince(signal.publishedAt);
-  const days = Math.round(hours / 24);
-  const timeWord =
-    hours < 24
-      ? `Only ${Math.max(1, Math.round(hours))} hours in`
-      : hours < 72
-        ? `${days} ${days === 1 ? "day" : "days"} in`
-        : `Late in the cycle but still uncontested`;
-
-  const audience: Record<Signal["category"], string> = {
-    "industry-news": "CFOs are searching for a clear read",
-    "trending-topic": "search demand is spiking",
-    "competitor-content": "a competitor is already staking a claim",
-    "enterprise-fintech": "buyers are re-evaluating their stack",
+  const days = Math.max(1, Math.round(hours / 24));
+  const window =
+    hours < 36
+      ? "48-hour news-jack window"
+      : hours < 96
+        ? "4-day follow-through window"
+        : "late-but-open slot before secondary coverage lands";
+  const gist = firstSentence(signal.summary);
+  const close: Record<FormatKey, string> = {
+    "trend-piece": `${FORMATS[format].label} format fits the window — short, pegged, publish today.`,
+    "thought-leadership": `The same ${days}-day window is when a defensible POV out-ranks reactive coverage.`,
+    "how-to": `Teams planning around this will search for implementation detail within the week.`,
+    comparison: `Buyers who see this news will open three tabs comparing vendors by Thursday.`,
+    "case-study": `A customer-backed piece lands harder when the event is still on the front page.`,
+    listicle: `A roundup hits LinkedIn feeds while the story is still trending.`,
+    "pillar-post": `Publishing the anchor piece into a live event captures the backlink surge.`,
+    faq: `Questions spike in the first ${days} days — AEO structure is what gets cited.`,
   };
+  return `${gist} That opens a ${window}. ${close[format]}`;
+}
 
-  const strategy: Record<FormatKey, string> = {
-    "trend-piece":
-      "a fast take puts Concourse at the top of the result before peers publish",
-    "thought-leadership":
-      "staking a defensible POV now separates Concourse from point solutions and defends rank",
-    "how-to":
-      "a practical walkthrough earns trust with teams implementing this and converts high-intent traffic",
-    comparison:
-      "a clear head-to-head converts bottom-funnel buyers comparing options",
-    "case-study":
-      "a named customer story with real numbers closes late-funnel deals",
-    listicle:
-      "a scannable roundup gets shared in finance Slack and on LinkedIn",
-    "pillar-post":
-      "an authoritative guide anchors the topic for sustained organic traffic",
-    faq: "FAQ structure wins ChatGPT, Perplexity, and Google AI Overviews",
+function vacuumRationale(signal: Signal, format: FormatKey): string {
+  const gist = firstSentence(signal.summary);
+  const competitor =
+    signal.category === "competitor-content"
+      ? signal.source
+      : pickSilentCompetitor(signal);
+  const close: Record<FormatKey, string> = {
+    "trend-piece": `A fast ${FORMATS[format].label.toLowerCase()} this week owns the search result before anyone responds.`,
+    "thought-leadership": `The lane is open to stake a finance-native POV that ${competitor} can't credibly make.`,
+    "how-to": `Concourse's workflow-level integrations with NetSuite, Snowflake, and Ramp make this a demonstration ${competitor} can't match.`,
+    comparison: `A head-to-head with ${competitor} is a keyword they won't publish under themselves.`,
+    "case-study": `Real customer numbers beat ${competitor}'s hypothetical framing in every bottom-funnel search.`,
+    listicle: `A finance-workflow listicle beats ${competitor}'s dashboard-first framing for operator buyers.`,
+    "pillar-post": `Publishing the definitive guide now makes ${competitor}'s later attempts look derivative.`,
+    faq: `AEO-structured Q&A under this topic is untouched — first mover gets cited for months.`,
   };
+  return `${gist} No one in the vendor set has shipped a credible take yet — ${competitor} has been quiet on this exact angle. ${close[format]}`;
+}
 
-  return `${timeWord} from ${signal.source} — ${audience[signal.category]}, and ${strategy[format]}.`;
+function searchRationale(signal: Signal, format: FormatKey): string {
+  const gist = firstSentence(signal.summary);
+  const kw = signal.keywords[0] ?? "ai for finance";
+  const secondary = signal.keywords[1] ?? "finance workflow";
+  const close: Record<FormatKey, string> = {
+    "trend-piece": `Publishing into a rising query before the SERP crystallizes is how you rank without backlinks.`,
+    "thought-leadership": `Ranking for an emerging query with a POV piece compounds — it becomes the citation everyone else links to.`,
+    "how-to": `A practical walkthrough is what finance teams actually click on when they type "${kw}" into Google this week.`,
+    comparison: `"${kw} vs" queries are about to spike — a comparison page is a direct conversion path.`,
+    "case-study": `A customer proof page under "${kw}" converts high-intent traffic other formats can't capture.`,
+    listicle: `"${secondary}" roundups are what gets screenshotted into Slack threads searching "${kw}."`,
+    "pillar-post": `A pillar anchor on "${kw}" owns the topic cluster as satellite queries branch off it.`,
+    faq: `LLMs quote FAQ structure verbatim — capturing the answer now owns the AI-Overview surface.`,
+  };
+  return `${gist} That's about to reshape how finance leaders search — expect a surge on "${kw}" and "${secondary}" over the next two weeks. ${close[format]}`;
+}
+
+function pickSilentCompetitor(signal: Signal): string {
+  const roster = ["Rogo", "Nominal", "Datarails", "Pigment", "Aleph"];
+  const idx = (signal.id.charCodeAt(0) + signal.id.length) % roster.length;
+  return roster[idx];
 }
 
 export function buildWhyItMatters(signal: Signal): string {

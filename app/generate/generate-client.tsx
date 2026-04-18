@@ -19,6 +19,7 @@ import { cn, shortId, slugify } from "@/lib/utils";
 import {
   markdownToPortableText,
   renderPortableTextToMarkdown,
+  stripLeadingTldr,
 } from "@/lib/portable-text";
 import { FormatPicker } from "@/components/format-picker";
 import { FormatBadge } from "@/components/format-badge";
@@ -133,7 +134,7 @@ export default function GenerateClient() {
       setTldr(d.content.tldr);
       setPrimaryKeyword(d.content.primaryKeyword);
       setSecondaryKeywords(d.content.secondaryKeywords.join(", "));
-      setBodyMd(renderPortableTextToMarkdown(d.content.body));
+      setBodyMd(stripLeadingTldr(renderPortableTextToMarkdown(d.content.body)));
       setFaq(d.content.faq);
       setInternalLinks(d.content.internalLinkSuggestions);
       setCallToAction(d.content.callToAction);
@@ -192,7 +193,7 @@ export default function GenerateClient() {
       setTldr(c.tldr);
       setPrimaryKeyword(c.primaryKeyword);
       setSecondaryKeywords(c.secondaryKeywords.join(", "));
-      setBodyMd(renderPortableTextToMarkdown(c.body));
+      setBodyMd(stripLeadingTldr(renderPortableTextToMarkdown(c.body)));
       setFaq(c.faq);
       setInternalLinks(c.internalLinkSuggestions);
       setCallToAction(c.callToAction);

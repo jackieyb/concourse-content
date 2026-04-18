@@ -145,6 +145,19 @@ function parseInlineTables(text: string): PortableContent[] {
   return out;
 }
 
+export function stripLeadingTldr(body: string): string {
+  const lines = body.replace(/\r\n/g, "\n").split("\n");
+  let i = 0;
+  while (i < lines.length && !lines[i].trim()) i += 1;
+  if (i >= lines.length) return body;
+  const first = lines[i].trim();
+  const isTldr = /^(\*\*)?\s*(tl;dr|tldr)\s*[:：]?(\*\*)?/i.test(first);
+  if (!isTldr) return body;
+  let j = i + 1;
+  while (j < lines.length && lines[j].trim()) j += 1;
+  return lines.slice(j).join("\n").trimStart();
+}
+
 export function markdownToPortableText(md: string): PortableContent[] {
   const lines = md.replace(/\r\n/g, "\n").split("\n");
   const blocks: PortableContent[] = [];

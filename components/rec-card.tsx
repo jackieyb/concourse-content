@@ -36,15 +36,11 @@ export function RecCard({
     router.push(`/generate?draft=${id}&seed=1`);
   };
 
-  const isTop = rank === 1;
-
   return (
     <div
       className={cn(
         "group relative flex h-full flex-col rounded-xl border bg-white p-5 shadow-sm transition-shadow hover:shadow-md",
-        isTop
-          ? "border-indigo-300 ring-2 ring-indigo-200"
-          : "border-neutral-200",
+        "border-indigo-300 ring-2 ring-indigo-200",
       )}
     >
       {/* Header */}
@@ -79,9 +75,7 @@ export function RecCard({
         onClick={startDraft}
         className={cn(
           "mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
-          isTop
-            ? "bg-indigo-600 text-white hover:bg-indigo-700"
-            : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+          "bg-indigo-600 text-white hover:bg-indigo-700",
         )}
       >
         Generate this post <ArrowRight className="h-4 w-4" />
@@ -97,15 +91,8 @@ export function RecCard({
 }
 
 function PickPill({ rank }: { rank: number }) {
-  if (rank === 1) {
-    return (
-      <span className="inline-flex items-center rounded-full bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
-        #1 Pick
-      </span>
-    );
-  }
   return (
-    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+    <span className="inline-flex items-center rounded-full bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
       #{rank} Pick
     </span>
   );

@@ -76,7 +76,7 @@ const RECOMMEND_TOOL: Anthropic.Tool = {
             rationale: {
               type: "string",
               description:
-                "Exactly 2 sentences. Sentence 1 = the news gist rewritten in Concourse voice (concrete, no fluff). Sentence 2 = a tight VP-of-content strategic line that integrates timing, audience, and why this format wins right now. Do NOT reuse the same vocabulary across the two sentences (e.g. don't say 'news-jack window' in both).",
+                "2-3 sentences explaining why THIS topic is worth pulling resources for THIS week. Before writing, pick ONE of these four framing approaches and commit to it for this rec (use a DIFFERENT framing for each of the 3 recs):\n  (a) TENSION FRAMING — name the contradiction or conflict the event creates. Example: 'The SEC just demanded more disclosure granularity in the same quarter finance teams are being asked to close faster. Those two pressures don't reconcile without automation.'\n  (b) TIMING WINDOW — make the case for why THIS week specifically, grounded in something concrete (earnings cycle, regulatory deadline, conference, release date). Example: 'Q2 close starts in 11 days. Any team still building forecast templates by hand is already behind — a walkthrough published now catches them mid-planning.'\n  (c) COMPETITIVE VACUUM — name who should be covering this and isn't. Example: 'Rogo and Nominal have both gone quiet on the NetSuite integration story for two weeks. There is an open lane to own the search result before they respond.'\n  (d) SEARCH BEHAVIOR SHIFT — name the new query this event is creating. Example: 'Within 48 hours of the Anthropic announcement, finance leaders will start searching \"claude for financial analysis\" — a term that had near-zero volume last month.'\nCRITICAL RULES:\n  - NEVER use the phrase 'CFOs are searching for a clear read.' It is banned.\n  - NEVER end two rationales in this batch with the same construction (e.g. don't close two with 'before peers publish' or 'while the wave is cresting').\n  - Each rationale should feel like a different content strategist wrote it.\n  - Be specific. Name actual companies, real integrations (NetSuite, Snowflake, Ramp), concrete numbers, specific dates. Vague strategic language is the failure mode.\n  - Goal: convince a skeptical editor to pull resources for THIS piece, THIS week.",
             },
             primaryKeyword: {
               type: "string",
@@ -179,6 +179,14 @@ export async function POST(req: Request) {
     "3. Format fit: match format to intent — how-to for implementation, trend-piece for news-jack, thought-leadership for POV on shifts, comparison for buyer-intent keywords, case-study for proof, etc.",
     "4. Format variety: avoid repeating a format used in the last 7 days unless the topic strongly demands it. Pick the least-recently-used format when forced.",
     "5. Diversity: the 3 picks should cover distinct topics/categories — don't give 3 takes on the same news.",
+    "",
+    "## Rationale variety (read the tool schema for full detail)",
+    "Before writing each rationale, mentally pick ONE of these four framing approaches and use a DIFFERENT one for each of the 3 recs:",
+    "  (1) tension framing — the conflict/contradiction the event creates",
+    "  (2) timing window — why THIS week specifically, grounded in a concrete date/cycle",
+    "  (3) competitive vacuum — who should be covering this and isn't",
+    "  (4) search behavior shift — the new query this event is creating",
+    "Banned phrase: 'CFOs are searching for a clear read.' Never end two rationales the same way. Name specific companies, integrations, dates, numbers — vague strategic language is the failure mode.",
     "",
     `Valid formats: ${FORMAT_KEYS.join(", ")}.`,
     "",

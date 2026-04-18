@@ -66,7 +66,7 @@ export default function DashboardPage() {
               {formatDayDate()}
             </p>
             <h1 className="mt-1 text-[28px] font-semibold leading-tight tracking-tight">
-              {timeOfDayGreeting()}, here&rsquo;s what&rsquo;s happening in finance AI
+              {timeOfDayGreeting()}, here&rsquo;s what&rsquo;s happening in finance + AI
             </h1>
             <p className="mt-1.5 text-sm text-neutral-500">
               Signals refreshed from industry sources
