@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Recommendation, FormatKey } from "@/types";
 import { FORMATS } from "@/lib/formats";
 import { FormatIcon } from "@/components/format-icon";
-import { useAppStore } from "@/lib/store";
-import { shortId, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 export function RecCard({
@@ -17,23 +15,11 @@ export function RecCard({
   rank: number;
 }) {
   const router = useRouter();
-  const upsertDraft = useAppStore((s) => s.upsertDraft);
 
   const startDraft = () => {
-    const id = shortId();
-    const now = new Date().toISOString();
-    upsertDraft({
-      id,
-      format: rec.format,
-      subject: rec.subject,
-      angle: rec.angle,
-      urgency: rec.urgency,
-      content: null,
-      status: "idle",
-      createdAt: now,
-      updatedAt: now,
-    });
-    router.push(`/generate?draft=${id}&seed=1`);
+    router.push(
+      `/generate?seed=1&signalId=${rec.signalId}&format=${rec.format}&autogen=1`,
+    );
   };
 
   return (
@@ -80,12 +66,6 @@ export function RecCard({
       >
         Generate this post <ArrowRight className="h-4 w-4" />
       </button>
-      <Link
-        href={`/generate?seed=1&signalId=${rec.signalId}&format=${rec.format}`}
-        className="mt-2 text-center text-[11px] text-neutral-400 hover:text-indigo-600"
-      >
-        Edit parameters first →
-      </Link>
     </div>
   );
 }

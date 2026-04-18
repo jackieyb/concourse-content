@@ -73,6 +73,7 @@ export default function GenerateClient() {
     const signalId = params.get("signalId");
     const formatParam = params.get("format") as FormatKey | null;
     const seed = params.get("seed");
+    const autogen = params.get("autogen");
 
     if (urlDraftId && drafts[urlDraftId]) {
       loadDraft(drafts[urlDraftId]);
@@ -96,19 +97,43 @@ export default function GenerateClient() {
             rec?.format ?? formatParam ?? "how-to";
           const chosenUrgency =
             rec?.urgency ?? (sig.category === "industry-news" ? "red" : "yellow");
-          setSubject(rec?.subject ?? sig.headline);
-          setAngle(rec?.angle ?? "");
+          const resolvedSubject = rec?.subject ?? sig.headline;
+          const resolvedAngle = rec?.angle ?? "";
+          const resolvedPk = rec?.primaryKeyword ?? sig.keywords[0] ?? "";
+          const resolvedSk = (
+            rec?.secondaryKeywords ?? sig.keywords.slice(1, 4)
+          ).join(", ");
+          const resolvedCtx = `Source: ${sig.source} (${sig.headline})\n\n${sig.summary}`;
+
+          setSubject(resolvedSubject);
+          setAngle(resolvedAngle);
           setFormat(chosenFormat);
           setUrgency(chosenUrgency);
-          setPrimaryKeyword(
-            rec?.primaryKeyword ?? sig.keywords[0] ?? "",
-          );
-          setSecondaryKeywords(
-            (rec?.secondaryKeywords ?? sig.keywords.slice(1, 4)).join(", "),
-          );
-          setSignalContext(
-            `Source: ${sig.source} (${sig.headline})\n\n${sig.summary}`,
-          );
+          setPrimaryKeyword(resolvedPk);
+          setSecondaryKeywords(resolvedSk);
+          setSignalContext(resolvedCtx);
+
+          if (autogen === "1") {
+            const nowIso = new Date().toISOString();
+            runGenerate(
+              {
+                id: shortId(),
+                subject: resolvedSubject,
+                angle: resolvedAngle,
+                format: chosenFormat,
+                urgency: chosenUrgency,
+                content: null,
+                status: "idle",
+                createdAt: nowIso,
+                updatedAt: nowIso,
+              },
+              {
+                primaryKeyword: resolvedPk,
+                secondaryKeywords: resolvedSk,
+                signalContext: resolvedCtx,
+              },
+            );
+          }
         })
         .catch(() => {});
       return;
@@ -141,7 +166,14 @@ export default function GenerateClient() {
     }
   };
 
-  const runGenerate = async (preset?: Draft) => {
+  const runGenerate = async (
+    preset?: Draft,
+    seed?: {
+      primaryKeyword?: string;
+      secondaryKeywords?: string;
+      signalContext?: string;
+    },
+  ) => {
     setError(null);
     setPublishedNote(null);
     setLoading(true);
@@ -162,6 +194,10 @@ export default function GenerateClient() {
     setDraftId(id);
     upsertDraft(newDraft);
 
+    const pk = seed?.primaryKeyword ?? primaryKeyword;
+    const sk = seed?.secondaryKeywords ?? secondaryKeywords;
+    const ctx = seed?.signalContext ?? signalContext;
+
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
@@ -171,12 +207,12 @@ export default function GenerateClient() {
           format: newDraft.format,
           urgency: newDraft.urgency,
           angle: newDraft.angle,
-          primaryKeyword: primaryKeyword || undefined,
-          secondaryKeywords: secondaryKeywords
+          primaryKeyword: pk || undefined,
+          secondaryKeywords: sk
             .split(",")
             .map((s) => s.trim())
             .filter(Boolean),
-          signalContext: signalContext || undefined,
+          signalContext: ctx || undefined,
         }),
       });
       if (!res.ok) {
