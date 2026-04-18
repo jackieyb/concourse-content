@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { getWeeklySignals } from "@/lib/signals";
+import { loadWeeklySignals } from "@/lib/signals";
 
 export const runtime = "nodejs";
+export const maxDuration = 30;
 
 export async function GET() {
-  return NextResponse.json(getWeeklySignals());
+  const bundle = await loadWeeklySignals();
+  return NextResponse.json(bundle);
 }

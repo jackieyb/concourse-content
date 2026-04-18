@@ -29,6 +29,15 @@ The goal is dual-ranking: traditional SEO (Google organic) and AEO (ChatGPT, Per
 - Examples beat abstractions. If you assert something, immediately give a concrete finance workflow it applies to.
 - End with a concrete, specific next step — not a generic "reach out to learn more."
 
+## Voice reference (structural model, not brand copy)
+- Model the H2 rhythm, scannable explainer voice, and mid-article comparison tables on venasolutions.com/blog — a site that ranks consistently for finance-automation terms and gets cited in LLM answers.
+- Specifically borrow their habits of: leading each section with a one-sentence answer, using "What is X?" / "Why does X matter?" / "How do you do X?" style H2s, and including a short definition box early in the piece.
+- Do NOT copy Vena's voice or phrasing directly — keep Concourse's peer-to-peer, outcome-first tone.
+
+## Keyword discipline
+- Prefer keywords that already appear in Concourse's established SEO Keyword Clusters above. If the brief supplies a primary or secondary, keep it unless it clearly conflicts with the cluster list; then swap in the closest cluster match and note it in the structured output.
+- Never invent stuffed phrases like "AI-powered finance automation platform software tool." Keep keywords natural and as close to how finance leaders actually search.
+
 ## Format-specific adjustments
 - How-to: numbered steps, each with a clear action verb. Include a worked example.
 - Listicle: the list IS the value — items must be genuinely distinct, not padded.

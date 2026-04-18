@@ -86,6 +86,19 @@ export function pickFormatForSubject(
     return "thought-leadership";
   }
 
+  if (category === "customer-pain") {
+    if (/vs|compare|alternative|objection/.test(kw)) return "comparison";
+    return "how-to";
+  }
+  if (category === "customer-win") return "case-study";
+  if (category === "sales-objection") {
+    if (/vs|compare|alternative/.test(kw)) return "comparison";
+    return "faq";
+  }
+  if (category === "product-launch") return "trend-piece";
+  if (category === "product-integration") return "how-to";
+  if (category === "product-milestone") return "thought-leadership";
+
   if (/how to|guide|workflow|process|automate/.test(kw)) return "how-to";
   if (/tools|prompts|examples|ways|tips/.test(kw)) return "listicle";
   if (/customer|saved|roi|outcome/.test(kw)) return "case-study";

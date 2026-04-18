@@ -2,22 +2,47 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import type { Signal, SignalCategory } from "@/types";
+import type { Signal, SignalCategory, SignalStream } from "@/types";
 import { formatRelative } from "@/lib/utils";
 import { FORMATS } from "@/lib/formats";
 import { FormatIcon } from "@/components/format-icon";
 import { suggestFromSignal } from "@/lib/recommend";
-import { ArrowRight, ExternalLink, Newspaper } from "lucide-react";
+import { ArrowRight, ExternalLink, Globe, MessagesSquare, Package } from "lucide-react";
 
-type FilterKey = "all" | SignalCategory;
+const STREAM_META: Record<
+  SignalStream,
+  {
+    label: string;
+    hint: string;
+    icon: typeof Globe;
+    activeClass: string;
+    inactiveClass: string;
+  }
+> = {
+  external: {
+    label: "Market",
+    hint: "What the industry is publishing",
+    icon: Globe,
+    activeClass: "border-indigo-600 bg-indigo-600 text-white",
+    inactiveClass: "border-neutral-200 bg-white text-neutral-600 hover:text-neutral-900",
+  },
+  customer: {
+    label: "Customer",
+    hint: "What sales and CS are hearing",
+    icon: MessagesSquare,
+    activeClass: "border-emerald-600 bg-emerald-600 text-white",
+    inactiveClass: "border-neutral-200 bg-white text-neutral-600 hover:text-neutral-900",
+  },
+  product: {
+    label: "Product",
+    hint: "What Concourse is shipping",
+    icon: Package,
+    activeClass: "border-violet-600 bg-violet-600 text-white",
+    inactiveClass: "border-neutral-200 bg-white text-neutral-600 hover:text-neutral-900",
+  },
+};
 
-const FILTERS: { key: FilterKey; label: string }[] = [
-  { key: "all", label: "All signals" },
-  { key: "trending-topic", label: "Trending" },
-  { key: "industry-news", label: "Industry" },
-  { key: "enterprise-fintech", label: "Fintech" },
-  { key: "competitor-content", label: "Competitor" },
-];
+const STREAM_ORDER: SignalStream[] = ["external", "customer", "product"];
 
 const CATEGORY_META: Record<
   SignalCategory,
@@ -43,54 +68,84 @@ const CATEGORY_META: Record<
     pill: "border-amber-200 bg-amber-50 text-amber-700",
     dot: "bg-amber-500",
   },
+  "customer-pain": {
+    label: "Customer pain",
+    pill: "border-rose-200 bg-rose-50 text-rose-700",
+    dot: "bg-rose-500",
+  },
+  "customer-win": {
+    label: "Customer win",
+    pill: "border-emerald-200 bg-emerald-50 text-emerald-700",
+    dot: "bg-emerald-500",
+  },
+  "sales-objection": {
+    label: "Sales objection",
+    pill: "border-orange-200 bg-orange-50 text-orange-700",
+    dot: "bg-orange-500",
+  },
+  "product-launch": {
+    label: "Launch",
+    pill: "border-violet-200 bg-violet-50 text-violet-700",
+    dot: "bg-violet-500",
+  },
+  "product-integration": {
+    label: "Integration",
+    pill: "border-fuchsia-200 bg-fuchsia-50 text-fuchsia-700",
+    dot: "bg-fuchsia-500",
+  },
+  "product-milestone": {
+    label: "Milestone",
+    pill: "border-indigo-200 bg-indigo-50 text-indigo-700",
+    dot: "bg-indigo-500",
+  },
+};
+
+export type SignalsSource = {
+  external: "exa" | "seed";
+  customer: "seed";
+  product: "seed";
 };
 
 export function SignalBoard({
   signals,
   weekOf,
+  source,
 }: {
   signals: Signal[];
   weekOf: string;
+  source?: SignalsSource;
 }) {
-  const [filter, setFilter] = useState<FilterKey>("all");
+  const [activeStream, setActiveStream] = useState<SignalStream>("external");
 
-  const sorted = useMemo(
-    () =>
-      [...signals].sort(
+  const byStream = useMemo(() => {
+    const m: Record<SignalStream, Signal[]> = {
+      external: [],
+      customer: [],
+      product: [],
+    };
+    for (const s of signals) {
+      if (m[s.stream]) m[s.stream].push(s);
+    }
+    for (const k of Object.keys(m) as SignalStream[]) {
+      m[k].sort(
         (a, b) =>
           new Date(b.publishedAt).getTime() -
           new Date(a.publishedAt).getTime(),
-      ),
-    [signals],
-  );
+      );
+    }
+    return m;
+  }, [signals]);
 
-  const visible = useMemo(
-    () => (filter === "all" ? sorted : sorted.filter((s) => s.category === filter)),
-    [sorted, filter],
-  );
-
-  const counts = useMemo(() => {
-    const c: Record<FilterKey, number> = {
-      all: sorted.length,
-      "trending-topic": 0,
-      "industry-news": 0,
-      "enterprise-fintech": 0,
-      "competitor-content": 0,
-    };
-    for (const s of sorted) c[s.category] += 1;
-    return c;
-  }, [sorted]);
+  const visible = byStream[activeStream];
+  const meta = STREAM_META[activeStream];
 
   return (
     <section>
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <Newspaper className="h-4 w-4 text-neutral-600" />
-            <h2 className="text-base font-semibold text-neutral-900">
-              This week&rsquo;s signals
-            </h2>
-          </div>
+          <h2 className="text-base font-semibold text-neutral-900">
+            This week&rsquo;s signals
+          </h2>
           <p className="mt-1 text-sm text-neutral-500">
             Week of{" "}
             {new Date(weekOf).toLocaleDateString("en-US", {
@@ -99,31 +154,53 @@ export function SignalBoard({
               year: "numeric",
             })}
             {" · "}
-            {signals.length} items captured, sorted most recent first
+            Three streams feeding the recommendation engine
           </p>
         </div>
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        {FILTERS.map((f) => {
-          const active = f.key === filter;
-          const count = counts[f.key];
+      <div className="mb-4 grid gap-2 sm:grid-cols-3">
+        {STREAM_ORDER.map((key) => {
+          const s = STREAM_META[key];
+          const active = key === activeStream;
+          const count = byStream[key].length;
+          const Icon = s.icon;
+          const sourceLabel = source?.[key];
           return (
             <button
-              key={f.key}
-              onClick={() => setFilter(f.key)}
+              key={key}
+              onClick={() => setActiveStream(key)}
               className={
-                "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors " +
-                (active
-                  ? "border-neutral-900 bg-neutral-900 text-white"
-                  : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:text-neutral-900")
+                "flex items-center justify-between gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors " +
+                (active ? s.activeClass : s.inactiveClass)
               }
             >
-              {f.label}
+              <span className="flex items-center gap-2">
+                <Icon className="h-4 w-4" />
+                <span className="flex flex-col">
+                  <span className="font-semibold">{s.label}</span>
+                  <span
+                    className={
+                      "text-[11px] " +
+                      (active ? "text-white/80" : "text-neutral-500")
+                    }
+                  >
+                    {s.hint}
+                    {key === "external" && sourceLabel ? (
+                      <>
+                        {" · "}
+                        <span className="font-medium">
+                          {sourceLabel === "exa" ? "live via Exa" : "seeded"}
+                        </span>
+                      </>
+                    ) : null}
+                  </span>
+                </span>
+              </span>
               <span
                 className={
-                  "rounded-full px-1.5 py-0.5 text-[10px] font-semibold " +
-                  (active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500")
+                  "rounded-full px-1.5 py-0.5 text-[11px] font-semibold " +
+                  (active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-600")
                 }
               >
                 {count}
@@ -133,9 +210,14 @@ export function SignalBoard({
         })}
       </div>
 
+      <div className="mb-3 text-xs text-neutral-500">
+        <span className="font-medium text-neutral-700">{meta.label}:</span>{" "}
+        {meta.hint.toLowerCase()}.
+      </div>
+
       {visible.length === 0 ? (
         <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center text-sm text-neutral-500">
-          No signals in this category this week.
+          No {meta.label.toLowerCase()} signals this week.
         </div>
       ) : (
         <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -188,7 +270,7 @@ function SignalCard({ signal }: { signal: Signal }) {
         </h3>
       )}
 
-      <p className="mt-2 line-clamp-2 text-[13px] text-neutral-600">
+      <p className="mt-2 line-clamp-3 text-[13px] text-neutral-600">
         {signal.summary}
       </p>
 

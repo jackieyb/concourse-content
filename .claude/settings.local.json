@@ -33,7 +33,22 @@
       "mcp__Claude_Preview__preview_start",
       "Bash(where npm *)",
       "Bash(where node *)",
-      "Bash(taskkill //PID 49580 //F)"
+      "Bash(taskkill //PID 49580 //F)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator status)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator diff --stat app/api/generate/route.ts app/api/recommend/route.ts app/generate/generate-client.tsx app/page.tsx components/rec-card.tsx lib/portable-text.ts lib/recommend.ts)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator log --oneline -20)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator log origin/main -1 --name-only)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator diff components/rec-card.tsx)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator diff app/api/recommend/route.ts lib/recommend.ts)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator diff app/generate/generate-client.tsx)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator add app/api/generate/route.ts app/api/recommend/route.ts app/generate/generate-client.tsx app/page.tsx components/rec-card.tsx lib/portable-text.ts lib/recommend.ts)",
+      "Bash(git commit -m ' *)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator push)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator diff --stat app/generate/generate-client.tsx components/rec-card.tsx)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator add app/generate/generate-client.tsx components/rec-card.tsx)",
+      "Bash(git -C /c/Users/emanc/Claude/concourse-content-generator commit -m ' *)",
+      "WebFetch(domain:www.gnomi.com)",
+      "Bash(find /c/Users/emanc/Claude/concourse-content-generator -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\) ! -path \"*/node_modules/*\" -exec grep -l \"@/lib/signals\\\\|@/data/signals\" {} \\\\;)"
     ]
   }
 }

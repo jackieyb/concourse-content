@@ -10,7 +10,16 @@ import { useAppStore } from "@/lib/store";
 import { formatDayDate, timeOfDayGreeting, todayKey } from "@/lib/utils";
 
 type RecResponse = { weekOf: string; recommendations: Recommendation[] };
-type SignalsResponse = { weekOf: string; capturedAt: string; signals: Signal[] };
+type SignalsResponse = {
+  weekOf: string;
+  capturedAt: string;
+  signals: Signal[];
+  source?: {
+    external: "exa" | "seed";
+    customer: "seed";
+    product: "seed";
+  };
+};
 
 export default function DashboardPage() {
   const publications = useAppStore((s) => s.publications);
@@ -128,7 +137,11 @@ export default function DashboardPage() {
 
       <div className="mt-12">
         {signalsData ? (
-          <SignalBoard signals={signalsData.signals} weekOf={signalsData.weekOf} />
+          <SignalBoard
+            signals={signalsData.signals}
+            weekOf={signalsData.weekOf}
+            source={signalsData.source}
+          />
         ) : (
           <div className="rounded-xl border border-neutral-200 bg-white p-8 text-sm text-neutral-500">
             Loading signals…

@@ -18,7 +18,8 @@ function urgencyFor(signal: Signal, format: FormatKey): Urgency {
   const fresh = hoursSince(signal.publishedAt) < FRESH_WINDOW_HOURS;
   const timelyCategory =
     signal.category === "industry-news" ||
-    signal.category === "competitor-content";
+    signal.category === "competitor-content" ||
+    signal.category === "product-launch";
 
   if (fresh && (timelyCategory || format === "trend-piece")) return "red";
   if (format === "trend-piece") return "red";
@@ -207,31 +208,61 @@ export function recommend({
 
   const picked: Recommendation[] = [];
   const usedFormats = new Set<FormatKey>();
+  const usedStreams = new Set<Signal["stream"]>();
 
   const framingOrder: Framing[] = shuffleFramings(
     scored[0]?.signal.id ?? "seed",
   );
 
-  for (const r of scored) {
-    const format = resolveFormat(r.format, r.signal.category, usedFormats, recentFormats);
-    const { subject, angle } = buildSubject(r.signal, format);
-    const urgency = urgencyFor(r.signal, format);
+  const streamsAvailable = new Set(scored.map((r) => r.signal.stream));
+  const coverAllStreams = streamsAvailable.size >= Math.min(3, limit);
+
+  const orderedPool = [...scored];
+  const remaining = () => orderedPool;
+  const pickNext = (): (typeof scored)[number] | undefined => {
+    if (coverAllStreams && usedStreams.size < Math.min(3, limit)) {
+      const slotsLeft = limit - picked.length;
+      const streamsLeft = Math.min(3, limit) - usedStreams.size;
+      if (slotsLeft <= streamsLeft) {
+        const preferred = remaining().find(
+          (r) => !usedStreams.has(r.signal.stream),
+        );
+        if (preferred) {
+          orderedPool.splice(orderedPool.indexOf(preferred), 1);
+          return preferred;
+        }
+      }
+    }
+    return orderedPool.shift();
+  };
+
+  let next = pickNext();
+  while (next && picked.length < limit) {
+    const format = resolveFormat(
+      next.format,
+      next.signal.category,
+      usedFormats,
+      recentFormats,
+    );
+    const { subject, angle } = buildSubject(next.signal, format);
+    const urgency = urgencyFor(next.signal, format);
     const framing = framingOrder[picked.length % framingOrder.length];
 
     picked.push({
-      id: `rec-${r.signal.id}`,
-      signalId: r.signal.id,
+      id: `rec-${next.signal.id}`,
+      signalId: next.signal.id,
       subject,
       angle,
       format,
       urgency,
-      rationale: buildRationale(r.signal, format, framing),
-      primaryKeyword: r.signal.keywords[0] ?? "ai for finance",
-      secondaryKeywords: r.signal.keywords.slice(1, 4),
+      rationale: buildRationale(next.signal, format, framing),
+      primaryKeyword: next.signal.keywords[0] ?? "ai for finance",
+      secondaryKeywords: next.signal.keywords.slice(1, 4),
     });
     usedFormats.add(format);
+    usedStreams.add(next.signal.stream);
 
-    if (picked.length >= limit) break;
+    next = pickNext();
   }
 
   return picked;
@@ -383,13 +414,25 @@ export function buildWhyItMatters(signal: Signal): string {
   const kw = signal.keywords[0] ?? "AI for finance";
   switch (signal.category) {
     case "industry-news":
-      return `CFOs are searching for guidance on ${kw} right now. A clear Concourse take published this week earns trust with buyers before the news cycle cools.`;
+      return `Buyer intent on ${kw} is spiking this week. A Concourse take published now earns trust before the news cycle cools and before competitors rank.`;
     case "trending-topic":
-      return `Buyer search intent on ${kw} is live. Publishing into this window captures active demand while the wave is cresting — and before competitors rank.`;
+      return `Search demand on ${kw} is live. Publishing into this window captures active traffic while the wave is cresting.`;
     case "enterprise-fintech":
-      return `When adjacent fintech ships in this space, our audience re-evaluates their stack. A clean breakdown positions Concourse as the finance-native, workflow-level answer to point tools.`;
+      return `Adjacent fintech ships in this space send our audience to re-evaluate. A clean breakdown positions Concourse as the workflow-level answer to point tools.`;
     case "competitor-content":
       return `A competitor just staked a claim on ${kw}. Concourse's POV defends search rank and reminds buyers why workflow-level agents beat dashboards.`;
+    case "customer-pain":
+      return `Prospects are asking about this in discovery right now. A public answer shortens sales cycles and ranks on the same queries buyers type after calls.`;
+    case "customer-win":
+      return `Real customer proof with specific numbers is the highest-converting late-funnel asset we can publish. Turn the win into a named case study.`;
+    case "sales-objection":
+      return `Sales is losing deals until there's a public, linkable answer to this objection. One durable piece of content unblocks every future pipeline call.`;
+    case "product-launch":
+      return `Our launch is the news peg. A trend-piece + how-to pairing doubles the organic surface area and gives sales a usable link within 48 hours.`;
+    case "product-integration":
+      return `New integrations are search magnets — "${kw}" pulls high-intent traffic from teams already using those tools and looking to connect them.`;
+    case "product-milestone":
+      return `Milestone numbers are citation bait. A POV piece anchored on the metric earns inbound links from analysts, press, and partner blogs.`;
     default:
       return "";
   }

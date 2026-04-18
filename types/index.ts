@@ -1,13 +1,22 @@
 export type Urgency = "red" | "yellow";
 
+export type SignalStream = "external" | "customer" | "product";
+
 export type SignalCategory =
   | "trending-topic"
   | "industry-news"
   | "enterprise-fintech"
-  | "competitor-content";
+  | "competitor-content"
+  | "customer-pain"
+  | "customer-win"
+  | "sales-objection"
+  | "product-launch"
+  | "product-integration"
+  | "product-milestone";
 
 export type Signal = {
   id: string;
+  stream: SignalStream;
   category: SignalCategory;
   headline: string;
   summary: string;
@@ -107,6 +116,7 @@ export type Draft = {
   error?: string;
   createdAt: string;
   updatedAt: string;
+  scheduledFor?: string;
 };
 
 export type Publication = {
@@ -118,11 +128,27 @@ export type Publication = {
   urgency: Urgency;
   primaryKeyword: string;
   excerpt: string;
-  content: GeneratedContent;
+  content?: GeneratedContent;
   publishedAt: string;
   mockMetrics?: {
     views: number;
     avgTimeOnPage: string;
     source: "mock";
   };
+};
+
+export type ScoreCheck = {
+  label: string;
+  passed: boolean;
+  value: string;
+  points: number;
+  max: number;
+};
+
+export type SeoAeoScore = {
+  seo: number;
+  aeo: number;
+  seoChecks: ScoreCheck[];
+  aeoChecks: ScoreCheck[];
+  partial: boolean;
 };

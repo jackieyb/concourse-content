@@ -1,0 +1,72 @@
+{
+  "weekOf": "2026-04-13",
+  "capturedAt": "2026-04-17T08:00:00Z",
+  "signals": [
+    {
+      "id": "cust-001",
+      "stream": "customer",
+      "category": "customer-pain",
+      "headline": "Controllers flagging NetSuite flux commentary as #1 manual task in discovery calls",
+      "summary": "Across 12 discovery calls this week, controllers at Series C–D SaaS companies named 'writing flux commentary into NetSuite' as the single most painful month-end task. Average time spent: 6–9 hours per month per controller. Three prospects asked for a side-by-side demo vs. Numeric.",
+      "source": "Sales — discovery call notes",
+      "publishedAt": "2026-04-17T14:00:00Z",
+      "importance": 91,
+      "keywords": ["flux commentary automation", "netsuite flux analysis", "month-end close commentary", "controller pain points"]
+    },
+    {
+      "id": "cust-002",
+      "stream": "customer",
+      "category": "customer-win",
+      "headline": "Lightmatter case: Concourse cut 12+ hours/month from their close",
+      "summary": "Lightmatter's VP Finance reported on the QBR that Concourse has removed 12+ hours per month of flux narrative writing and reconciling Ramp expense categorizations against their NetSuite chart. They want to co-author a blog post about it.",
+      "source": "CS — Lightmatter QBR",
+      "publishedAt": "2026-04-16T19:00:00Z",
+      "importance": 88,
+      "keywords": ["concourse customer story", "ramp netsuite reconciliation", "finance hours saved", "ai close automation"]
+    },
+    {
+      "id": "cust-003",
+      "stream": "customer",
+      "category": "sales-objection",
+      "headline": "Three enterprise deals stalled on 'how do you differ from Rogo?' this week",
+      "summary": "Mid-market → upper mid-market prospects (Maximus, CurbWaste expansion, Pave) all came back with the same blocker: 'We can't tell how Concourse is different from Rogo for the analyst workflow.' Sales is asking for a durable comparison asset.",
+      "source": "Sales — deal review",
+      "publishedAt": "2026-04-16T16:30:00Z",
+      "importance": 86,
+      "keywords": ["concourse vs rogo", "ai agents for finance analyst", "finance ai comparison", "buyer objection"]
+    },
+    {
+      "id": "cust-004",
+      "stream": "customer",
+      "category": "customer-pain",
+      "headline": "FP&A leads asking how to safely expose AI agents to board-level numbers",
+      "summary": "Six prospects this week independently surfaced governance concerns: 'how do we stop the agent from touching unreleased board metrics?' This is a new pattern — three months ago the objection was accuracy, now it's permissions and trust boundaries.",
+      "source": "Sales — discovery call notes",
+      "publishedAt": "2026-04-15T13:00:00Z",
+      "importance": 84,
+      "keywords": ["ai agent governance finance", "ai permissions board metrics", "finance ai trust boundary", "ai agent access control"]
+    },
+    {
+      "id": "cust-005",
+      "stream": "customer",
+      "category": "customer-win",
+      "headline": "CurbWaste doubled Concourse seats after Q1 — wants a joint case study on 75% manual cut",
+      "summary": "CurbWaste's CFO confirmed they cut manual reporting work by 75% in Q1 and have budget approved to double seats. Marketing has been asked to turn this into a flagship case study with numbers by end of month.",
+      "source": "CS — CurbWaste expansion",
+      "publishedAt": "2026-04-14T20:00:00Z",
+      "importance": 82,
+      "keywords": ["curbwaste concourse case study", "75% manual work reduction", "finance team expansion", "concourse customer roi"]
+    },
+    {
+      "id": "cust-006",
+      "stream": "customer",
+      "category": "sales-objection",
+      "headline": "CFOs at pre-IPO companies asking about audit trail and SOX compliance",
+      "summary": "Every pre-IPO prospect in the last 10 days asked some version of: 'how will my auditor accept agent-generated work?' Internal audit partners are blocking deals until there's a public, authoritative answer.",
+      "source": "Sales — enterprise pipeline",
+      "publishedAt": "2026-04-14T11:00:00Z",
+      "importance": 85,
+      "keywords": ["ai audit trail for finance", "sox compliance ai agents", "pre-ipo finance ai", "auditor ai acceptance"]
+    }
+  ]
+}

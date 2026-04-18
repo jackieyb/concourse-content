@@ -1,0 +1,72 @@
+{
+  "weekOf": "2026-04-13",
+  "capturedAt": "2026-04-17T08:00:00Z",
+  "signals": [
+    {
+      "id": "prod-001",
+      "stream": "product",
+      "category": "product-launch",
+      "headline": "Concourse ships 'Flux Agent' for NetSuite — auto-writes variance commentary into the GL",
+      "summary": "Our highest-requested capability for controllers is now in general availability: the Flux Agent drafts variance commentary directly into NetSuite memos, with citations back to transaction-level evidence. Internal dogfooding across 8 teams cut commentary time by 82%.",
+      "source": "Product — changelog",
+      "publishedAt": "2026-04-17T15:00:00Z",
+      "importance": 94,
+      "keywords": ["concourse flux agent", "ai variance commentary", "netsuite flux automation", "finance ai launch"]
+    },
+    {
+      "id": "prod-002",
+      "stream": "product",
+      "category": "product-integration",
+      "headline": "Snowflake native integration now live — agents read warehouse data without exports",
+      "summary": "Concourse agents can now query Snowflake directly via a first-party connector, removing the CSV-export workaround teams have been using. Security reviews cleared with SOC2 audit partner; PII masking enforced at the connector layer.",
+      "source": "Product — integrations",
+      "publishedAt": "2026-04-16T17:00:00Z",
+      "importance": 87,
+      "keywords": ["concourse snowflake integration", "ai agent data warehouse", "finance ai soc2", "pii masking finance ai"]
+    },
+    {
+      "id": "prod-003",
+      "stream": "product",
+      "category": "product-milestone",
+      "headline": "10M agent-authored journal entries now cleared by customer controllers",
+      "summary": "Concourse has crossed 10 million agent-authored journal entries accepted by customer controllers across production workflows. A durable trust benchmark — worth publishing externally alongside a methodology note on how we measure acceptance rate.",
+      "source": "Internal — platform metrics",
+      "publishedAt": "2026-04-15T09:00:00Z",
+      "importance": 83,
+      "keywords": ["ai journal entries accepted", "concourse platform milestone", "finance ai trust benchmark", "ai agent acceptance rate"]
+    },
+    {
+      "id": "prod-004",
+      "stream": "product",
+      "category": "product-launch",
+      "headline": "Audit Trail Export goes GA — every agent action downloadable for audit",
+      "summary": "Audit Trail Export ships Monday. Finance teams can hand their auditor a single CSV covering every agent action, with source data, prompt, model, and approver. Directly addresses the pre-IPO objection sales has been hearing.",
+      "source": "Product — compliance",
+      "publishedAt": "2026-04-14T18:00:00Z",
+      "importance": 90,
+      "keywords": ["concourse audit trail export", "ai agent auditability", "sox compliance for ai", "ai audit csv"]
+    },
+    {
+      "id": "prod-005",
+      "stream": "product",
+      "category": "product-integration",
+      "headline": "Ramp + Concourse: auto-categorized spend now flows into close workflows",
+      "summary": "New Ramp integration lets Concourse pull categorized card transactions and push close-cycle journal entries back. Built in direct response to Ramp's Autopilot Close announcement — positions Concourse as the workflow layer, not a dashboard.",
+      "source": "Product — integrations",
+      "publishedAt": "2026-04-13T14:00:00Z",
+      "importance": 81,
+      "keywords": ["concourse ramp integration", "ai spend to close", "ramp autopilot close", "finance ai workflow layer"]
+    },
+    {
+      "id": "prod-006",
+      "stream": "product",
+      "category": "product-milestone",
+      "headline": "Concourse named a 'Cool Vendor' in new Gartner AI for Finance report",
+      "summary": "Gartner's April report listed Concourse alongside two other vendors in the workflow-agent category. Citation-worthy, but the analyst note explicitly flags our NetSuite + Ramp + Snowflake coverage as the differentiator — worth amplifying.",
+      "source": "Analyst — Gartner",
+      "publishedAt": "2026-04-12T10:00:00Z",
+      "importance": 79,
+      "keywords": ["gartner ai for finance", "concourse cool vendor", "workflow agents finance", "concourse differentiation"]
+    }
+  ]
+}

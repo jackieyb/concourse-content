@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type Anthropic from "@anthropic-ai/sdk";
 import { getAnthropic, MODELS } from "@/lib/claude";
 import { BRAND_BRIEF } from "@/lib/brand-brief";
-import { getWeeklySignals } from "@/lib/signals";
+import { loadWeeklySignals } from "@/lib/signals";
 import { recommend as deterministicRecommend } from "@/lib/recommend";
 import { SEED_PUBLICATIONS } from "@/lib/back-catalog";
 import { FORMATS } from "@/lib/formats";
@@ -107,7 +107,7 @@ function buildSignalsBlock(signals: Signal[]): string {
   return signals
     .map(
       (s) =>
-        `- id=${s.id} [${s.category}] (${s.source}, ${s.publishedAt}, importance ${s.importance}) — ${s.headline} :: ${s.summary} :: keywords: ${s.keywords.join(", ")}`,
+        `- id=${s.id} stream=${s.stream} [${s.category}] (${s.source}, ${s.publishedAt}, importance ${s.importance}) — ${s.headline} :: ${s.summary} :: keywords: ${s.keywords.join(", ")}`,
     )
     .join("\n");
 }
@@ -146,7 +146,7 @@ export async function POST(req: Request) {
     }
   } catch {}
 
-  const { signals, weekOf } = getWeeklySignals();
+  const { signals, weekOf } = await loadWeeklySignals();
 
   let client;
   try {
@@ -173,12 +173,17 @@ export async function POST(req: Request) {
     "## Recent content history",
     buildHistoryBlock(publications),
     "",
+    "## Three signal streams",
+    "- stream=external → what the market is publishing (news, competitors, fintech launches). Fed live from Exa.",
+    "- stream=customer → what sales and CS are hearing from prospects and accounts (pains, wins, objections).",
+    "- stream=product → what Concourse is shipping (launches, integrations, milestones).",
+    "",
     "## Ranking criteria (apply in order)",
-    "1. Topic importance: highest-value topic for CFOs, Controllers, and FP&A leaders. Prefer live news pegs.",
-    "2. Content gap: deprioritize topics already covered in the last 14 days.",
-    "3. Format fit: match format to intent — how-to for implementation, trend-piece for news-jack, thought-leadership for POV on shifts, comparison for buyer-intent keywords, case-study for proof, etc.",
-    "4. Format variety: avoid repeating a format used in the last 7 days unless the topic strongly demands it. Pick the least-recently-used format when forced.",
-    "5. Diversity: the 3 picks should cover distinct topics/categories — don't give 3 takes on the same news.",
+    "1. Stream diversity (HARD RULE): the 3 picks MUST cover all three streams — exactly one from external, one from customer, one from product — whenever each stream has at least one signal with importance ≥ 3. If one stream genuinely has no viable signal this week, state that explicitly in the rationale of the double-stream pick, then fall back to 2 from one stream + 1 from another. Two externals by default is a failure mode — customer wins and product launches convert better for pipeline.",
+    "2. Strategic value within each stream: inside each stream, pick the single highest-ROI signal. Customer-win > customer-pain > sales-objection. Product-launch > product-integration > product-milestone. External: prefer enterprise-fintech or industry-news over generic trending-topic.",
+    "3. Content gap: deprioritize any signal whose topic or primary keyword overlaps with a post shipped in the last 14 days (see history below).",
+    "4. Format fit per pick: how-to for implementation, trend-piece for external news-jack, thought-leadership for product-launch POV, comparison for buyer-intent keywords, case-study for customer-win, faq for sales-objection.",
+    "5. Format variety across the 3 picks: no two picks should share the same format.",
     "",
     "## Rationale variety (read the tool schema for full detail)",
     "Before writing each rationale, mentally pick ONE of these four framing approaches and use a DIFFERENT one for each of the 3 recs:",

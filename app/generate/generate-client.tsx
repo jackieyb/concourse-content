@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Sparkles, FileJson, Eye, Pencil, Send, Trash2, X } from "lucide-react";
+import { CalendarClock, Loader2, Sparkles, FileJson, Eye, Pencil, Send, Trash2, X } from "lucide-react";
 import type {
   Draft,
   FormatKey,
@@ -37,6 +37,7 @@ export default function GenerateClient() {
   const deleteDraft = useAppStore((s) => s.deleteDraft);
   const setActiveDraft = useAppStore((s) => s.setActiveDraft);
   const publishDraft = useAppStore((s) => s.publishDraft);
+  const scheduleDraft = useAppStore((s) => s.scheduleDraft);
   const lastRecommendations = useAppStore((s) => s.lastRecommendations);
 
   const [subject, setSubject] = useState("");
@@ -62,6 +63,9 @@ export default function GenerateClient() {
   const [faq, setFaq] = useState<GeneratedContent["faq"]>([]);
   const [internalLinks, setInternalLinks] = useState<string[]>([]);
   const [publishedNote, setPublishedNote] = useState<string | null>(null);
+  const [schedulePickerOpen, setSchedulePickerOpen] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduledNote, setScheduledNote] = useState<string | null>(null);
 
   const initRan = useRef(false);
 
@@ -151,6 +155,7 @@ export default function GenerateClient() {
     setAngle(d.angle);
     setFormat(d.format);
     setUrgency(d.urgency);
+    setScheduleDate(d.scheduledFor ? d.scheduledFor.slice(0, 10) : "");
     if (d.content) {
       setTitle(d.content.title);
       setMetaTitle(d.content.metaTitle);
@@ -500,7 +505,73 @@ export default function GenerateClient() {
                   slug: /{slugify(title)}
                 </span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <button
+                    onClick={() => setSchedulePickerOpen((v) => !v)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                  >
+                    <CalendarClock className="h-3.5 w-3.5" />
+                    {scheduleDate
+                      ? `Scheduled ${new Date(scheduleDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
+                      : "Schedule"}
+                  </button>
+                  {schedulePickerOpen && (
+                    <div className="absolute right-0 top-full z-10 mt-1 w-64 rounded-md border border-neutral-200 bg-white p-3 shadow-lg">
+                      <label className="text-xs font-medium text-neutral-700">
+                        Publish on
+                      </label>
+                      <input
+                        type="date"
+                        value={scheduleDate}
+                        onChange={(e) => setScheduleDate(e.target.value)}
+                        className="mt-1 w-full rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-900 focus:outline-none"
+                      />
+                      <div className="mt-3 flex items-center justify-between gap-2">
+                        {scheduleDate && (
+                          <button
+                            onClick={() => {
+                              if (!draftId) return;
+                              scheduleDraft(draftId, null);
+                              setScheduleDate("");
+                              setSchedulePickerOpen(false);
+                              setScheduledNote("Schedule cleared.");
+                            }}
+                            className="text-xs text-neutral-500 hover:text-red-600"
+                          >
+                            Clear
+                          </button>
+                        )}
+                        <div className="ml-auto flex gap-2">
+                          <button
+                            onClick={() => setSchedulePickerOpen(false)}
+                            className="rounded-md px-2 py-1 text-xs text-neutral-600 hover:bg-neutral-100"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            disabled={!draftId || !scheduleDate}
+                            onClick={() => {
+                              if (!draftId || !scheduleDate) return;
+                              saveEdits();
+                              const iso = new Date(
+                                `${scheduleDate}T09:00:00`,
+                              ).toISOString();
+                              scheduleDraft(draftId, iso);
+                              setSchedulePickerOpen(false);
+                              setScheduledNote(
+                                `Queued for ${new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}.`,
+                              );
+                            }}
+                            className="rounded-md bg-neutral-900 px-2 py-1 text-xs font-medium text-white hover:bg-neutral-800 disabled:bg-neutral-300"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={onPublish}
                   className="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
@@ -509,6 +580,15 @@ export default function GenerateClient() {
                 </button>
               </div>
             </div>
+
+            {scheduledNote && (
+              <div className="rounded-md border border-indigo-200 bg-indigo-50 px-4 py-2 text-xs text-indigo-800">
+                {scheduledNote}{" "}
+                <Link href="/queue" className="underline">
+                  View queue →
+                </Link>
+              </div>
+            )}
 
             {/* Title + meta */}
             <div className="rounded-xl border border-neutral-200 bg-white p-5">

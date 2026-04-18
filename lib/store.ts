@@ -16,6 +16,7 @@ type AppState = {
   setActiveDraft: (id: string | null) => void;
   deleteDraft: (id: string) => void;
   publishDraft: (draftId: string) => Publication | null;
+  scheduleDraft: (draftId: string, iso: string | null) => void;
   setRecommendations: (recs: Recommendation[], date: string) => void;
   resetAll: () => void;
 };
@@ -66,6 +67,18 @@ export const useAppStore = create<AppState>()(
         set((s) => ({ publications: [pub, ...s.publications] }));
         return pub;
       },
+
+      scheduleDraft: (draftId, iso) =>
+        set((s) => {
+          const draft = s.drafts[draftId];
+          if (!draft) return s;
+          const updated: Draft = {
+            ...draft,
+            scheduledFor: iso ?? undefined,
+            updatedAt: new Date().toISOString(),
+          };
+          return { drafts: { ...s.drafts, [draftId]: updated } };
+        }),
 
       setRecommendations: (recs, date) =>
         set({ lastRecommendations: recs, recommendationsDate: date }),
