@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.concourse.co)",
+      "Bash(npm --version)",
+      "Bash(npx --version)",
+      "Bash(winget --version)",
+      "Bash(winget install *)",
+      "Bash(powershell.exe -Command 'Get-Process | Where-Object { $_.ProcessName -match '\\\\''winget|msiexec|node'\\\\'' } | Select-Object ProcessName, Id, StartTime')",
+      "Bash(powershell.exe -Command \"Get-Process winget -ErrorAction SilentlyContinue\")",
+      "Bash(powershell.exe -Command \"Get-Process msiexec -ErrorAction SilentlyContinue\")",
+      "Bash(powershell.exe -Command \"Get-Process winget,msiexec -ErrorAction SilentlyContinue | Select-Object ProcessName, Id\")",
+      "Bash(powershell.exe -Command \"Stop-Process -Name winget -Force -ErrorAction SilentlyContinue; Stop-Process -Name msiexec -Force -ErrorAction SilentlyContinue\")",
+      "Bash(grep -v '^$')",
+      "Bash(powershell.exe -Command \"Get-Command node -ErrorAction SilentlyContinue | Select-Object Source\")",
+      "Bash(powershell.exe -Command \"Stop-Process -Id 46580 -Force -ErrorAction SilentlyContinue\")",
+      "Bash(powershell.exe -Command \"Get-Process msiexec -ErrorAction SilentlyContinue | Select-Object ProcessName, Id\")",
+      "Bash(powershell.exe -Command \"Stop-Process -Id 46580 -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Get-Process msiexec -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Get-Process msiexec -ErrorAction SilentlyContinue | Select-Object ProcessName, Id\")",
+      "Bash(taskkill //F //PID 46580)",
+      "Bash(powershell.exe -Command \"Restart-Service -Name msiserver -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Get-Service msiserver | Select-Object Name, Status\")",
+      "Bash(\"/c/Program Files/nodejs/node.exe\" --version)",
+      "Bash(\"/c/Program Files/nodejs/npm.cmd\" --version)",
+      "Bash(export PATH=\"/c/Program Files/nodejs:$PATH\")",
+      "Bash(npx --yes create-next-app@latest . --typescript --tailwind --app --eslint --no-src-dir --import-alias \"@/*\" --use-npm --yes)",
+      "Read(//c/c/Users/emanc/Claude/**)",
+      "Read(//c/c/Users/emanc/Claude/concourse-content-generator/**)",
+      "Bash(npm install *)",
+      "Bash(curl -sS http://localhost:3000/api/signals)",
+      "Bash(curl -sS -X POST http://localhost:3000/api/recommend -H \"Content-Type: application/json\" -d '{}')",
+      "Bash(python -c \"import sys, json; d=json.load\\(sys.stdin\\); [print\\(f\\\\\"#{i+1} [{r['urgency']}] {r['format']}: {r['subject']}\\\\\\\\n   pk: {r['primaryKeyword']}\\\\\\\\n   why: {r['rationale']}\\\\\\\\n\\\\\"\\) for i, r in enumerate\\(d['recommendations']\\)]\")",
+      "Bash(node -e \"let d=''; process.stdin.on\\('data',c=>d+=c\\); process.stdin.on\\('end',\\(\\)=>{const o=JSON.parse\\(d\\); o.recommendations.forEach\\(\\(r,i\\)=>{console.log\\(\\\\`#\\\\${i+1} [\\\\${r.urgency}] \\\\${r.format}: \\\\${r.subject}\\\\`\\); console.log\\(\\\\`  pk: \\\\${r.primaryKeyword}\\\\`\\); console.log\\(\\\\`  why: \\\\${r.rationale}\\\\\\\\n\\\\`\\);}\\);}\\);\")",
+      "Bash(npx tsc *)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where npm *)",
+      "Bash(where node *)",
+      "Bash(taskkill //PID 49580 //F)"
+    ]
+  }
+}

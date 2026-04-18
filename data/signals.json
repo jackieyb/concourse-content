@@ -1,0 +1,215 @@
+{
+  "weekOf": "2026-04-13",
+  "capturedAt": "2026-04-17T08:00:00Z",
+  "signals": [
+    {
+      "id": "sig-017",
+      "category": "industry-news",
+      "headline": "Treasury Department names AI-risk finance officer role in final guidance",
+      "summary": "Treasury's finalized guidance on AI in financial services names a required 'AI Risk Finance Officer' role at every institution above $10B in assets. Publicly-traded companies have 12 months to comply.",
+      "source": "US Treasury",
+      "url": "https://home.treasury.gov/news/press-releases",
+      "publishedAt": "2026-04-17T09:30:00Z",
+      "importance": 93,
+      "keywords": ["treasury ai finance officer", "ai risk finance officer role", "treasury ai guidance 2026", "ai compliance finance", "finance ai governance"]
+    },
+    {
+      "id": "sig-018",
+      "category": "competitor-content",
+      "headline": "Rogo ships 'Deal Team Copilot' with M&A data room ingestion",
+      "summary": "Rogo announced a copilot that ingests entire data rooms and answers questions about financials, contracts, and dependencies in natural language. Positioned directly at IB deal teams.",
+      "source": "Rogo blog",
+      "url": "https://rogo.ai/blog",
+      "publishedAt": "2026-04-17T07:15:00Z",
+      "importance": 81,
+      "keywords": ["ai for m&a data rooms", "deal team copilot", "rogo deal team copilot", "ai for investment banking", "ai contract review"]
+    },
+    {
+      "id": "sig-019",
+      "category": "trending-topic",
+      "headline": "'AI close cycle benchmark' is trending on LinkedIn after Stripe's close-in-2-days post",
+      "summary": "A LinkedIn post from Stripe's Controller claiming a 2-day month-end close went viral (14k reactions) and sparked a debate about realistic benchmarks at scale. Competitors are chiming in with their own numbers.",
+      "source": "LinkedIn",
+      "url": "https://www.linkedin.com/feed",
+      "publishedAt": "2026-04-17T06:00:00Z",
+      "importance": 84,
+      "keywords": ["ai close cycle benchmark", "2-day month end close", "stripe controller close cycle", "fast close benchmarks", "finance benchmarks"]
+    },
+    {
+      "id": "sig-016",
+      "category": "enterprise-fintech",
+      "headline": "Ramp announces 'Autopilot Close' with journal entry generation for AP",
+      "summary": "Ramp extended its spend management suite with AI-generated journal entries tied directly to card and bill transactions. Auto-close aims at mid-market finance teams already using Ramp for AP.",
+      "source": "Ramp blog",
+      "url": "https://ramp.com/blog",
+      "publishedAt": "2026-04-17T05:00:00Z",
+      "importance": 76,
+      "keywords": ["ramp autopilot close", "ai journal entries for ap", "automated month end close", "ai accounts payable"]
+    },
+    {
+      "id": "sig-001",
+      "category": "trending-topic",
+      "headline": "Agentic AI for FP&A trends on Hacker News front page",
+      "summary": "A post titled 'Show HN: We replaced our FP&A analyst with Claude' hit #3 on Hacker News with 800+ comments debating whether agents can handle variance analysis and forecasting without human oversight.",
+      "source": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "publishedAt": "2026-04-15T14:20:00Z",
+      "importance": 92,
+      "keywords": ["agentic ai for fp&a", "variance analysis", "ai forecasting", "ai agents", "fp&a automation"]
+    },
+    {
+      "id": "sig-002",
+      "category": "trending-topic",
+      "headline": "CFOs googling 'how to evaluate AI finance tools' spikes 180% QoQ",
+      "summary": "Google Trends shows a sustained 6-week climb in buyer-intent searches around evaluating AI finance tools, with breakout queries including 'AI finance tool ROI,' 'AI agent vs RPA finance,' and 'finance AI audit trail.'",
+      "source": "Google Trends",
+      "url": "https://trends.google.com/trends/explore?q=ai+finance+tools",
+      "publishedAt": "2026-04-14T10:00:00Z",
+      "importance": 85,
+      "keywords": ["how to evaluate ai finance tools", "ai finance tool roi", "ai finance evaluation framework", "ai audit trail", "buyer intent"]
+    },
+    {
+      "id": "sig-003",
+      "category": "trending-topic",
+      "headline": "New IDC survey: 73% of finance leaders piloting AI agents, only 14% in production",
+      "summary": "IDC's Q1 2026 finance automation report finds a widening pilot-to-production gap. Leaders cite data quality, auditability, and change management as top blockers.",
+      "source": "IDC",
+      "url": "https://www.idc.com/getdoc.jsp",
+      "publishedAt": "2026-04-11T09:00:00Z",
+      "importance": 88,
+      "keywords": ["ai adoption in finance", "moving ai from pilot to production", "change management for finance ai", "auditability", "idc finance report"]
+    },
+    {
+      "id": "sig-004",
+      "category": "industry-news",
+      "headline": "SEC proposes disclosure rules for AI-generated financial reporting",
+      "summary": "The SEC released a proposed rule requiring public companies to disclose when generative AI is used in the preparation of financial statements, including audit trail retention requirements. Comment period closes 60 days from publication.",
+      "source": "SEC.gov",
+      "url": "https://www.sec.gov/rules/proposed",
+      "publishedAt": "2026-04-15T13:00:00Z",
+      "importance": 95,
+      "keywords": ["sec ai disclosure rules", "ai in financial reporting", "sec compliance for ai", "ai audit trail", "financial reporting regulation"]
+    },
+    {
+      "id": "sig-005",
+      "category": "industry-news",
+      "headline": "Anthropic releases Claude Finance Suite with domain-tuned models for accounting workflows",
+      "summary": "Anthropic launched a finance-specialized version of Claude with built-in support for GAAP and IFRS accounting treatments, SOX controls vocabulary, and native integrations with NetSuite and Workday.",
+      "source": "Anthropic blog",
+      "url": "https://www.anthropic.com/news",
+      "publishedAt": "2026-04-16T15:00:00Z",
+      "importance": 90,
+      "keywords": ["claude finance suite", "ai models for accounting", "gaap-aware ai", "sox compliance ai", "netsuite ai integration"]
+    },
+    {
+      "id": "sig-006",
+      "category": "industry-news",
+      "headline": "AICPA publishes draft guidance on AI agent use in audit engagements",
+      "summary": "The AICPA released draft professional guidance clarifying auditor responsibilities when clients use AI agents in financial close and reporting. Focuses on evidence documentation and agent output verification.",
+      "source": "AICPA",
+      "url": "https://www.aicpa-cima.com/news",
+      "publishedAt": "2026-04-14T11:00:00Z",
+      "importance": 82,
+      "keywords": ["aicpa ai audit guidance", "ai agents in audit engagements", "audit evidence for ai outputs", "ai in financial close"]
+    },
+    {
+      "id": "sig-007",
+      "category": "enterprise-fintech",
+      "headline": "Stripe Q1 earnings: cites AI-driven finance team productivity as key margin driver",
+      "summary": "Stripe's Q1 shareholder letter attributes a 12-point improvement in G&A as a percentage of revenue to AI adoption across their finance and accounting teams. Specifically called out reductions in close cycle time and FP&A headcount growth.",
+      "source": "Stripe investor relations",
+      "url": "https://stripe.com/newsroom",
+      "publishedAt": "2026-04-15T16:00:00Z",
+      "importance": 87,
+      "keywords": ["ai-driven finance productivity", "reducing g&a with ai", "ai close cycle acceleration", "stripe ai finance"]
+    },
+    {
+      "id": "sig-008",
+      "category": "enterprise-fintech",
+      "headline": "Brex launches 'AI Controller' beta to 500 customer finance teams",
+      "summary": "Brex is testing an embedded AI agent that handles expense categorization, policy enforcement, and variance flagging inside their spend management platform.",
+      "source": "Brex blog",
+      "url": "https://www.brex.com/journal",
+      "publishedAt": "2026-04-13T12:00:00Z",
+      "importance": 78,
+      "keywords": ["ai controller for spend management", "ai expense categorization", "ai policy enforcement", "brex ai controller"]
+    },
+    {
+      "id": "sig-009",
+      "category": "enterprise-fintech",
+      "headline": "Mercury Treasury adds agent-based cash forecasting for startup CFOs",
+      "summary": "Mercury shipped a new agent that projects 13-week cash flow using transaction history, expected invoices, and customer-specified forecast assumptions. Aimed at series A-C finance leads without dedicated FP&A staff.",
+      "source": "Mercury blog",
+      "url": "https://mercury.com/blog",
+      "publishedAt": "2026-04-12T14:00:00Z",
+      "importance": 74,
+      "keywords": ["13-week cash forecasting with ai", "ai treasury for startups", "startup cfo tools", "mercury treasury agent"]
+    },
+    {
+      "id": "sig-010",
+      "category": "competitor-content",
+      "headline": "Rogo publishes 'The Investment Banker's Guide to AI Agents' — 4,000-word pillar",
+      "summary": "Rogo dropped a long pillar post targeting IB analysts and associates, positioning their platform for deal-team use cases. Heavily optimized for queries like 'AI for investment banking' and 'LLM for M&A.'",
+      "source": "Rogo blog",
+      "url": "https://rogo.ai/blog",
+      "publishedAt": "2026-04-16T10:00:00Z",
+      "importance": 76,
+      "keywords": ["ai agents for investment banking", "llm for m&a deal teams", "rogo pillar post", "competitor response"]
+    },
+    {
+      "id": "sig-011",
+      "category": "competitor-content",
+      "headline": "Datarails publishes case study: 'How a $400M SaaS company cut close from 10 to 4 days'",
+      "summary": "Datarails released a customer case study with a specific close-cycle metric that competes directly with Concourse's positioning. The customer quote emphasizes integration with existing Excel workflows.",
+      "source": "Datarails blog",
+      "url": "https://www.datarails.com/blog",
+      "publishedAt": "2026-04-14T09:00:00Z",
+      "importance": 80,
+      "keywords": ["cutting close cycle in half", "ai in saas finance", "datarails close cycle case study", "excel vs ai finance workflows", "competitor response"]
+    },
+    {
+      "id": "sig-012",
+      "category": "competitor-content",
+      "headline": "Numeric launches 'Close Agent' with month-end reconciliation automation",
+      "summary": "Numeric announced an AI agent specifically targeting the month-end close, handling reconciliations, journal entry generation, and flux commentary. Pricing starts at $2K/month.",
+      "source": "Numeric blog",
+      "url": "https://www.numeric.io/blog",
+      "publishedAt": "2026-04-15T11:00:00Z",
+      "importance": 83,
+      "keywords": ["ai close agent", "automated reconciliations", "ai journal entry generation", "flux commentary ai", "numeric close agent"]
+    },
+    {
+      "id": "sig-013",
+      "category": "competitor-content",
+      "headline": "Pigment publishes benchmark: 'State of AI in Enterprise FP&A 2026'",
+      "summary": "Pigment released a proprietary benchmark report surveying 1,200 enterprise FP&A leaders. Key stat: 62% use AI for variance commentary generation, up from 18% last year. Heavy organic traffic play.",
+      "source": "Pigment blog",
+      "url": "https://www.pigment.com/blog",
+      "publishedAt": "2026-04-13T08:00:00Z",
+      "importance": 79,
+      "keywords": ["state of ai in enterprise fp&a", "ai variance commentary benchmark", "ai fp&a adoption data", "pigment benchmark report"]
+    },
+    {
+      "id": "sig-014",
+      "category": "trending-topic",
+      "headline": "Month-end close cycle times becoming a public CFO benchmark on LinkedIn",
+      "summary": "Multiple CFOs at growth-stage companies have been publicly posting their close cycle times on LinkedIn, driving comparison and community discussion. Concourse customers are well-positioned to contribute.",
+      "source": "LinkedIn",
+      "url": "https://www.linkedin.com/feed",
+      "publishedAt": "2026-04-16T12:00:00Z",
+      "importance": 72,
+      "keywords": ["month-end close benchmark", "cfo close cycle time", "public finance benchmarks", "linkedin finance community"]
+    },
+    {
+      "id": "sig-015",
+      "category": "industry-news",
+      "headline": "FASB opens comment period on AI-assisted estimates in financial reporting",
+      "summary": "FASB is soliciting comments on whether AI-assisted estimates (allowances, fair value, revenue accruals) require expanded disclosure. Directly affects how finance teams can deploy agents in GAAP-reporting workflows.",
+      "source": "FASB.org",
+      "url": "https://www.fasb.org/news",
+      "publishedAt": "2026-04-12T10:00:00Z",
+      "importance": 86,
+      "keywords": ["ai-assisted accounting estimates", "fasb ai guidance", "gaap disclosure for ai", "revenue accruals ai", "ai in financial reporting"]
+    }
+  ]
+}

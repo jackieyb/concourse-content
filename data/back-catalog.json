@@ -1,0 +1,76 @@
+{
+  "publications": [
+    {
+      "id": "pub-seed-006",
+      "draftId": "seed-006",
+      "title": "AI Agents for Controllers: A 2026 Playbook",
+      "slug": "ai-agents-for-controllers-2026",
+      "format": "pillar-post",
+      "urgency": "yellow",
+      "primaryKeyword": "ai agents for controllers",
+      "excerpt": "A practical, workflow-by-workflow guide to where controllers are getting real leverage from AI agents — from close to reporting to audit readiness.",
+      "publishedAt": "2026-04-15T14:00:00Z",
+      "mockMetrics": { "views": 412, "avgTimeOnPage": "4:12", "source": "mock" }
+    },
+    {
+      "id": "pub-seed-005",
+      "draftId": "seed-005",
+      "title": "How Lightmatter's 6-Person Finance Team Saves 12 Hours a Month With Concourse",
+      "slug": "lightmatter-saves-12-hours-concourse",
+      "format": "case-study",
+      "urgency": "yellow",
+      "primaryKeyword": "lightmatter concourse case study",
+      "excerpt": "Lightmatter's controller walks through exactly which workflows they automated first and how they measured the time saved.",
+      "publishedAt": "2026-04-11T10:00:00Z",
+      "mockMetrics": { "views": 284, "avgTimeOnPage": "3:48", "source": "mock" }
+    },
+    {
+      "id": "pub-seed-004",
+      "draftId": "seed-004",
+      "title": "15 AI Prompts Every FP&A Analyst Should Have in Their Back Pocket",
+      "slug": "15-ai-prompts-fpa-analysts",
+      "format": "listicle",
+      "urgency": "yellow",
+      "primaryKeyword": "ai prompts for fp&a",
+      "excerpt": "Copy-paste-ready prompts for variance commentary, board-deck narrative, forecast sanity checks, and more.",
+      "publishedAt": "2026-04-08T09:00:00Z",
+      "mockMetrics": { "views": 1247, "avgTimeOnPage": "5:03", "source": "mock" }
+    },
+    {
+      "id": "pub-seed-003",
+      "draftId": "seed-003",
+      "title": "Anthropic's Computer Use API, Explained for Finance Teams",
+      "slug": "anthropic-computer-use-finance-teams",
+      "format": "trend-piece",
+      "urgency": "red",
+      "primaryKeyword": "anthropic computer use finance",
+      "excerpt": "What Anthropic's new browser-using agent means for finance workflows that still live in legacy ERP UIs.",
+      "publishedAt": "2026-04-04T17:00:00Z",
+      "mockMetrics": { "views": 892, "avgTimeOnPage": "3:22", "source": "mock" }
+    },
+    {
+      "id": "pub-seed-002",
+      "draftId": "seed-002",
+      "title": "How to Automate Flux Analysis With an AI Agent (Step-by-Step)",
+      "slug": "automate-flux-analysis-ai-agent",
+      "format": "how-to",
+      "urgency": "yellow",
+      "primaryKeyword": "automate flux analysis",
+      "excerpt": "A concrete walkthrough — with screenshots — of setting up an AI agent to generate variance commentary across your GL.",
+      "publishedAt": "2026-03-31T10:00:00Z",
+      "mockMetrics": { "views": 1534, "avgTimeOnPage": "6:18", "source": "mock" }
+    },
+    {
+      "id": "pub-seed-001",
+      "draftId": "seed-001",
+      "title": "Concourse vs RPA: Why Finance Teams Are Rebuilding Their Automation Stack",
+      "slug": "concourse-vs-rpa-finance-automation",
+      "format": "comparison",
+      "urgency": "yellow",
+      "primaryKeyword": "ai agents vs rpa finance",
+      "excerpt": "Where RPA ends and AI agents begin — and why most finance teams' existing automation isn't enough.",
+      "publishedAt": "2026-03-27T14:00:00Z",
+      "mockMetrics": { "views": 763, "avgTimeOnPage": "4:56", "source": "mock" }
+    }
+  ]
+}
